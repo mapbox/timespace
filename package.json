@@ -1,0 +1,58 @@
+{
+  "name": "@mapbox/timespace",
+  "version": "1.0.0",
+  "description": "compute fuzzy local time from a location",
+  "main": "index.js",
+  "dependencies": {
+    "d3-queue": "^3.0.3",
+    "mkdirp": "^0.5.1",
+    "moment": "^2.12.0",
+    "moment-timezone": "^0.5.5",
+    "rimraf": "^2.5.4",
+    "tile-cover": "^3.0.1"
+  },
+  "devDependencies": {
+    "eslint": "^2.5.1",
+    "eslint-config-mourner": "^2.0.0",
+    "tap": "^5.7.0",
+    "tilebelt": "^1.0.1",
+    "turf": "^2.0.2",
+    "turf-intersect": "^1.4.2"
+  },
+  "scripts": {
+    "test": "npm run lint; tap -R spec test/test.*.js;",
+    "lint": "eslint *.js --fix",
+    "regenerate": "node lib/quantize.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mapbox/timespace.git"
+  },
+  "keywords": [
+    "localization",
+    "time",
+    "timezone",
+    "geo"
+  ],
+  "author": "morganherlocker",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/mapbox/timespace/issues"
+  },
+  "homepage": "https://github.com/mapbox/timespace#readme",
+  "eslintConfig": {
+    "extends": "mourner",
+    "rules": {
+      "strict": "off",
+      "indent": [
+        2,
+        2
+      ],
+      "camelcase": 0,
+      "space-before-function-paren": [
+        2,
+        "never"
+      ]
+    }
+  }
+}
