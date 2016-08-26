@@ -22,8 +22,6 @@ var tile = [20,49,7];
 var timezone1 = ts.getFuzzyTimezoneFromTile(tile);
 //=> 'America/Los_Angeles'
 
-
-// Currently only support zoom level 7
 var quadkey = '0230102';
 var timezone2 = ts.getFuzzyTimezoneFromTile(tile);
 //=> 'America/Los_Angeles'
