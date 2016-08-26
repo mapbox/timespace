@@ -1,4 +1,4 @@
-# timespace
+# timespace [![Build Status](https://travis-ci.org/mapbox/timespace.svg?branch=master)](https://travis-ci.org/mapbox/timespace)
 Compute fuzzy local time from a location.
 
 
