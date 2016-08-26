@@ -1,5 +1,5 @@
 {
-  "name": "@mapbox/timespace",
+  "name": "timespace",
   "version": "1.0.0",
   "description": "compute fuzzy local time from a location",
   "main": "index.js",
