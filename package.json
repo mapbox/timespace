@@ -20,7 +20,7 @@
     "turf-intersect": "^1.4.2"
   },
   "scripts": {
-    "test": "npm run lint; tap -R spec test/test.*.js;",
+    "test": "npm run lint; tap -R spec test/*.test.js;",
     "lint": "eslint *.js --fix",
     "regenerate": "node lib/quantize.js"
   },

@@ -103,3 +103,12 @@ test('check higher zoom levels', function(t) {
 
   t.end();
 });
+
+test('get z7 parent', function(t) {
+  var expected = [20, 49, 7].join('/');
+  var tile = [344063, 802816, 21];
+  var actual = ts.getz7Parent(tile).join('/');
+  t.equal(actual, expected, 'finds tile\'s z7 parent');
+
+  t.end();
+});

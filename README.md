@@ -17,7 +17,6 @@ var time = ts.getFuzzyLocalTimeFromPoint(timestamp, point);
 //=> '2016-08-25T16:43:12-07:00'
 
 
-// Currently only support zoom level 7
 var tile = [20,49,7];
 var timezone1 = ts.getFuzzyTimezoneFromTile(tile);
 //=> 'America/Los_Angeles'
@@ -25,6 +24,8 @@ var timezone1 = ts.getFuzzyTimezoneFromTile(tile);
 var quadkey = '0230102';
 var timezone2 = ts.getFuzzyTimezoneFromTile(tile);
 //=> 'America/Los_Angeles'
+
+// any tiles passed with zoom levels > 7 will return the timezone of its z7 parent
 ```
 
 
