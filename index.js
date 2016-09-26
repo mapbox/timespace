@@ -7,7 +7,7 @@ var z = 7;
 module.exports = {
   getFuzzyLocalTimeFromPoint: getFuzzyLocalTimeFromPoint,
   getFuzzyTimezoneFromTile: getFuzzyTimezoneFromTile,
-  getFuzzyTimezonFromQuadkey: getFuzzyTimezoneFromQuadkey
+  getFuzzyTimezoneFromQuadkey: getFuzzyTimezoneFromQuadkey
 };
 
 function getFuzzyLocalTimeFromPoint(timestamp, point) {
