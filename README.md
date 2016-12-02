@@ -4,12 +4,12 @@ Compute fuzzy local time from a location.
 
 ## Install
 ```
-npm install timespace
+npm install @mapbox/timespace
 ```
 
 ## Use
 ```js
-var ts = require('timespace');
+var ts = require('@mapbox/timespace');
 
 var timestamp = Date.now();
 var point = [-122.27783203125, 37.84015683604136];
