@@ -22,7 +22,7 @@ var timezone1 = ts.getFuzzyTimezoneFromTile(tile);
 //=> 'America/Los_Angeles'
 
 var quadkey = '0230102';
-var timezone2 = ts.getFuzzyTimezoneFromTile(tile);
+var timezone2 = ts.getFuzzyTimezoneFromQuadkey(quadkey);
 //=> 'America/Los_Angeles'
 
 // any tiles passed with zoom levels > 7 will return the timezone of its z7 parent
