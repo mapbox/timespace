@@ -6,10 +6,13 @@ test('check zone', function(t) {
   var point = [-122.27783203125, 37.84015683604136];
   t.equal(ts.getFuzzyLocalTimeFromPoint(timestamp, point), '2016-08-25T16:36:59-07:00');
 
-  var tile = [20, 49, 7];
+  var tile = [41, 98, 8];
   t.equal(ts.getFuzzyTimezoneFromTile(tile), 'America/Los_Angeles');
 
-  var quadkey = '0230102';
+  var quadkey = '02301021';
+  t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
+
+  quadkey = '02301023';
   t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
 
   t.end();
@@ -17,11 +20,6 @@ test('check zone', function(t) {
 
 test('check higher zoom levels', function(t) {
   var tile, quadkey;
-  // z8
-  tile = [41, 98, 8];
-  quadkey = '02301021';
-  t.equal(ts.getFuzzyTimezoneFromTile(tile), 'America/Los_Angeles');
-  t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
 
   // z9
   tile = [83, 196, 9];
@@ -104,11 +102,11 @@ test('check higher zoom levels', function(t) {
   t.end();
 });
 
-test('get z7 parent', function(t) {
-  var expected = [20, 49, 7].join('/');
+test('get z8 parent', function(t) {
+  var expected = [41, 98, 8].join('/');
   var tile = [344063, 802816, 21];
-  var actual = ts.getz7Parent(tile).join('/');
-  t.equal(actual, expected, 'finds tile\'s z7 parent');
+  var actual = ts.getz8Parent(tile).join('/');
+  t.equal(actual, expected, 'finds tile\'s z8 parent');
 
   t.end();
 });
