@@ -1,10 +1,13 @@
 var test = require('tap').test;
+var moment = require('moment-timezone');
 var ts = require('../');
+
 
 test('check zone', function(t) {
   var timestamp = 1472168219655;
   var point = [-122.27783203125, 37.84015683604136];
-  t.equal(ts.getFuzzyLocalTimeFromPoint(timestamp, point), '2016-08-25T16:36:59-07:00');
+  var expected = moment.tz(new Date(timestamp), 'America/Los_Angeles');
+  t.deepequal(ts.getFuzzyLocalTimeFromPoint(timestamp, point), expected);
 
   var tile = [41, 98, 8];
   t.equal(ts.getFuzzyTimezoneFromTile(tile), 'America/Los_Angeles');
@@ -13,6 +16,22 @@ test('check zone', function(t) {
   t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
 
   quadkey = '02301023';
+  t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
+
+  t.end();
+});
+
+test('check lower zoom levels', function(t) {
+  // z7
+  var quadkey = '0230102';
+  t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
+
+  // z6
+  quadkey = '023010';
+  t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
+
+  // z5
+  quadkey = '02301';
   t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
 
   t.end();
@@ -108,5 +127,22 @@ test('get z8 parent', function(t) {
   var actual = ts.getz8Parent(tile).join('/');
   t.equal(actual, expected, 'finds tile\'s z8 parent');
 
+  t.end();
+});
+
+
+
+test('get z8 children', function(t) {
+  var tile = [20, 49, 7];
+  var expected = [[40, 98, 8], [41, 98, 8], [41, 99, 8], [40, 99, 8]];
+  var actual = ts.getz8Children(tile);
+  t.deepequal(actual, expected, 'finds tile\'s z8 children');
+
+  tile = [10, 24, 6];
+  actual = ts.getz8Children(tile);
+  t.equal(actual.length, 16, 'finds 16 children')
+  actual.forEach(function(child) {
+    t.equal(child[2], 8, 'finds z8 child')
+  });
   t.end();
 });
