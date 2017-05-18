@@ -29,20 +29,20 @@ zlib.gunzip(buffer, function(err, data) {
   // filter out timezones not supported by moment-timezone
   zones.features = zones.features.filter(function(zone) {
 
-    // check if TZID is in `moment-timezone` library
-    if (moment.tz.zone(zone.properties.TZID) === null) {
+    // check if tzid is in `moment-timezone` library
+    if (moment.tz.zone(zone.properties.tzid) === null) {
 
-      if (zone.properties.TZID in knownIssues) {
-        // if known issue, replace with the correct TZID
-        var wrongTz = zone.properties.TZID;
-        var correctTz = knownIssues[zone.properties.TZID];
-        zone.properties.TZID = correctTz;
+      if (zone.properties.tzid in knownIssues) {
+        // if known issue, replace with the correct tzid
+        var wrongTz = zone.properties.tzid;
+        var correctTz = knownIssues[zone.properties.tzid];
+        zone.properties.tzid = correctTz;
         console.log('Fixed timezone: ' + wrongTz + ' -> ' + correctTz);
         return true;
 
       } else {
         // if issue not known, remove from geojson
-        console.log('Filtered out bad timezone ' + zone.properties.TZID);
+        console.log('Filtered out bad timezone ' + zone.properties.tzid);
         return false;
       }
     } else return true;

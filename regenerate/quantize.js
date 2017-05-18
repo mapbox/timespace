@@ -34,7 +34,7 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
   zones = JSON.parse(data);
 
   zones = zones.features.filter(function(zone) {
-    return moment.tz.zone(zone.properties.TZID) !== null;
+    return moment.tz.zone(zone.properties.tzid) !== null;
   });
   totalZones = zones.length;
   console.info('No. of timezones:', totalZones);
@@ -48,7 +48,10 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
 
   // output {tile: timezone}
   q.awaitAll(function (err) {
-    if (err) throw err;
+    if (err) {
+      console.error(err)
+      throw err;
+    }
 
     Object.keys(tiles).forEach(function(tile) {
       tiles[tile] = tiles[tile].name;
@@ -63,15 +66,19 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
 function coverTile(zone, done) {
   var opts = {min_zoom: z, max_zoom: z};
 
-  cover.tiles(zone.geometry, opts).forEach(function(tile) {
-    var id = tile.join('/');
-    var poly = turf.polygon(tilebelt.tileToGeoJSON(tile).coordinates);
-    var overlap = turf.area(turf.intersect(zone, poly));
+  try {
+    cover.tiles(zone.geometry, opts).forEach(function(tile) {
+      var id = tile.join('/');
+      var poly = turf.polygon(tilebelt.tileToGeoJSON(tile).coordinates);
+      var overlap = turf.area(turf.intersect(zone, poly));
 
-    if (!tiles[id] || tiles[id].overlap < overlap)
-      tiles[id] = {name: zone.properties.TZID, overlap: overlap};
-  });
-
+      if (!tiles[id] || tiles[id].overlap < overlap)
+        tiles[id] = {name: zone.properties.tzid, overlap: overlap};
+    });
+  } catch (e) {
+    console.log('Error detected:', e.message, '; skipping zone');
+  }
+  
   zonesDone++;
   console.info('Processed', zonesDone + '/' + totalZones)
 
