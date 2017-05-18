@@ -1,3 +1,10 @@
+/**
+ * Qunatize timezone.
+ *
+ * USE:
+ *   node quantize.js 8   # fuzzy z8 timezones
+ */
+
 var fs = require('fs');
 var path = require('path');
 var cover = require('tile-cover');
@@ -7,7 +14,8 @@ var d3 = require('d3-queue');
 var mkdirp = require('mkdirp');
 var rimraf = require('rimraf');
 var moment = require('moment-timezone');
-var spawn = require('child_process').spawn
+var zlib = require('zlib');
+var z = +process.argv[2];
 
 // for tracking progress
 var zonesDone = 0;
@@ -16,23 +24,14 @@ var totalZones = 0;
 var tiles = {};
 var tzNames = {};
 
-var dataPath = path.join(__dirname, 'data');
-rimraf(dataPath, function () {
-  mkdirp(dataPath);
-});
 
-// download timezone region border
-console.info('Downloading timezone polygons...');
-args = [
-  'https://gist.githubusercontent.com/morganherlocker/1313f4163af757677da9/raw/2065e02ef2a8ec0346ead77e487dff557e1a5b6b/timezones.geojson',
-  '-o', path.join(dataPath, 'timezones.geojson')
-]
-var proc = spawn('curl', args);
+// load timezone polygons
+var timezoneBuffer = fs.readFileSync(path.join(__dirname, '../timezones.geojson.gz'));
+zlib.gunzip(timezoneBuffer, function(err, data) {
+  if (err) throw err;
 
-proc.on('close', function(code) {
 
-  // load timezone polygons
-  var zones = JSON.parse(fs.readFileSync(path.join(__dirname, '/data/timezones.geojson'), 'utf8'));
+  zones = JSON.parse(data);
 
   zones = zones.features.filter(function(zone) {
     return moment.tz.zone(zone.properties.TZID) !== null;
@@ -55,15 +54,13 @@ proc.on('close', function(code) {
       tiles[tile] = tiles[tile].name;
     });
 
-    fs.writeFileSync(path.join(__dirname, '/timezones.json'), JSON.stringify(tiles));
+    fs.writeFileSync(path.join(__dirname, '../lib/timezones.json'), JSON.stringify(tiles));
   });
 
-  rimraf(dataPath, function() {});
 });
 
 
 function coverTile(zone, done) {
-  var z = 8;
   var opts = {min_zoom: z, max_zoom: z};
 
   cover.tiles(zone.geometry, opts).forEach(function(tile) {

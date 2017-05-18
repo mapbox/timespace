@@ -3,46 +3,51 @@ var tilebelt = require('tilebelt');
 var moment = require('moment-timezone');
 var ss = require('simple-statistics');
 
-var z = 8;
+var z = Object.keys(tiles)[0].split('/').map(Number)[2];
 
 module.exports = {
   getFuzzyLocalTimeFromPoint: getFuzzyLocalTimeFromPoint,
   getFuzzyTimezoneFromTile: getFuzzyTimezoneFromTile,
   getFuzzyTimezoneFromQuadkey: getFuzzyTimezoneFromQuadkey,
-  getz8Parent: getz8Parent,
-  getz8Children: getz8Children
+  getParent: getParent,
+  getChildren: getChildren
 };
 
 function getFuzzyLocalTimeFromPoint(timestamp, point) {
   var tile = tilebelt.pointToTile(point[0], point[1], z).join('/');
   var locale = tiles[tile];
 
-  return moment.tz(new Date(timestamp), locale);
+  if (locale) return moment.tz(new Date(timestamp), locale);
+  else return undefined;
 }
 
 function getFuzzyTimezoneFromTile(tile) {
   if (tile[2] === z) {
-    // zoom level = 8
     var key = tile.join('/');
     if (key in tiles) return tiles[key];
     else throw new Error('tile not found');
 
   } else if (tile[2] > z) {
     // higher zoom level (9, 10, 11, ...)
-    key = getz8Parent(tile).join('/');
+    key = getParent(tile).join('/');
     if (key in tiles) return tiles[key];
     else throw new Error('tile not found');
 
   } else {
     // lower zoom level (..., 5, 6, 7)
-    var children = getz8Children(tile);
+    var children = getChildren(tile);
     var votes = [];  // list of timezone abbrevations
     var abbrs = {};  // abbrevation to full name lookup table
     children.forEach(function(child) {
       key = child.join('/');
       if (key in tiles) {
         var tz = tiles[key];   // timezone name
-        var abbr = moment.tz(Date.now(), tz)._z.abbrs[0]; // timezone abbreviation
+
+        // Need to use timezone abbreviation becuase e.g. America/Los_Angeles
+        // and America/Vancouver are the same. Use a time to determine the
+        // abbreviation, in case two similar tz have slightly different
+        // daylight savings schedule.
+        var abbr = moment.tz(Date.now(), tz)._z.abbrs[0];
         votes.push(abbr);
         abbrs[abbr] = tz;
       }
@@ -58,19 +63,19 @@ function getFuzzyTimezoneFromQuadkey(quadkey) {
   return getFuzzyTimezoneFromTile(tile);
 }
 
-function getz8Parent(tile) {
-  if (tile[2] < z) throw new Error('input tile zoom < 8');
-  if (tile[2] > z) return getz8Parent(tilebelt.getParent(tile));
+function getParent(tile) {
+  if (tile[2] < z) throw new Error('input tile zoom < ' + z);
+  if (tile[2] > z) return getParent(tilebelt.getParent(tile));
   else return tile;
 }
 
-function getz8Children(tile) {
-  if (tile[2] > 8) throw new Error('input tile zoom > 8');
+function getChildren(tile) {
+  if (tile[2] > z) throw new Error('input tile zoom > ' + z);
   if (tile[2] === z) return [tile];
 
   var children = tilebelt.getChildren(tile);
-  return getz8Children(children[0])
-         .concat(getz8Children(children[1]))
-         .concat(getz8Children(children[2]))
-         .concat(getz8Children(children[3]));
+  return getChildren(children[0])
+         .concat(getChildren(children[1]))
+         .concat(getChildren(children[2]))
+         .concat(getChildren(children[3]));
 }

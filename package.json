@@ -23,7 +23,7 @@
   "scripts": {
     "test": "npm run lint; tap -R spec test/*.test.js;",
     "lint": "eslint *.js --fix",
-    "regenerate": "node lib/quantize.js"
+    "regenerate": "regenerate/regenerate-timezones.sh"
   },
   "repository": {
     "type": "git",
