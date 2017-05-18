@@ -5,6 +5,37 @@ var ts = require('../');
 
 var z = Object.keys(timezones)[0].split('/').map(Number)[2];
 
+test('get parent', function(t) {
+  var tile = [344063, 802816, 21];
+  var actual = ts._getParent(tile);
+
+  if (z === 8) {
+    t.deepEqual(actual, [41, 98, 8], 'finds tile\'s z8 parent');
+  } else {
+    t.equal(actual[2], z);
+  }
+
+  t.end();
+});
+
+test('get children', function(t) {
+  if (z === 8) {
+    var tile = [20, 49, 7];
+    var expected = [[40, 98, 8], [41, 98, 8], [41, 99, 8], [40, 99, 8]];
+    var actual = ts._getChildren(tile);
+    t.deepequal(actual, expected, 'finds tile\'s z8 children');
+
+    tile = [10, 24, 6];
+    actual = ts._getChildren(tile);
+    t.equal(actual.length, 16, 'finds 16 children')
+    actual.forEach(function(child) {
+      t.equal(child[2], 8, 'finds z8 child')
+    });
+  }
+
+  t.end();
+});
+
 test('check zone', function(t) {
   var timestamp = 1472168219655;
   var point = [-122.27783203125, 37.84015683604136];
@@ -192,39 +223,6 @@ test('check higher zoom levels', function(t) {
   } else {
     t.true(ts.getFuzzyTimezoneFromTile(tile).indexOf('/') > 0);
     t.true(ts.getFuzzyTimezoneFromQuadkey(quadkey).indexOf('/') > 0);
-  }
-
-  t.end();
-});
-
-test('get parent', function(t) {
-  var tile = [344063, 802816, 21];
-  var actual = ts.getParent(tile);
-
-  if (z === 8) {
-    t.deepEqual(actual, [41, 98, 8], 'finds tile\'s z8 parent');
-  } else {
-    t.equal(actual[2], z);
-  }
-
-  t.end();
-});
-
-
-
-test('get children', function(t) {
-  if (z === 8) {
-    var tile = [20, 49, 7];
-    var expected = [[40, 98, 8], [41, 98, 8], [41, 99, 8], [40, 99, 8]];
-    var actual = ts.getChildren(tile);
-    t.deepequal(actual, expected, 'finds tile\'s z8 children');
-
-    tile = [10, 24, 6];
-    actual = ts.getChildren(tile);
-    t.equal(actual.length, 16, 'finds 16 children')
-    actual.forEach(function(child) {
-      t.equal(child[2], 8, 'finds z8 child')
-    });
   }
 
   t.end();

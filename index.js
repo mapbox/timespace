@@ -9,10 +9,16 @@ module.exports = {
   getFuzzyLocalTimeFromPoint: getFuzzyLocalTimeFromPoint,
   getFuzzyTimezoneFromTile: getFuzzyTimezoneFromTile,
   getFuzzyTimezoneFromQuadkey: getFuzzyTimezoneFromQuadkey,
-  getParent: getParent,
-  getChildren: getChildren
+  _getParent: _getParent,      // expose for testing
+  _getChildren: _getChildren   // expose for testing
 };
 
+/**
+ * Returns the local time at the point of interest.
+ * @param  {Integer} timestamp   a unix timestamp
+ * @param  {Array}   point       a [lng, lat] point of interest
+ * @return {Object}              a moment-timezone object
+ */
 function getFuzzyLocalTimeFromPoint(timestamp, point) {
   var tile = tilebelt.pointToTile(point[0], point[1], z).join('/');
   var locale = tiles[tile];
@@ -21,6 +27,11 @@ function getFuzzyLocalTimeFromPoint(timestamp, point) {
   else return undefined;
 }
 
+/**
+ * Retrieves the timezone of the tile of interest at z8-level accuracy.
+ * @param  {Array}  tile   [x, y, z] coordinate of a tile
+ * @return {String}        timezone for the tile
+ */
 function getFuzzyTimezoneFromTile(tile) {
   if (tile[2] === z) {
     var key = tile.join('/');
@@ -29,13 +40,13 @@ function getFuzzyTimezoneFromTile(tile) {
 
   } else if (tile[2] > z) {
     // higher zoom level (9, 10, 11, ...)
-    key = getParent(tile).join('/');
+    key = _getParent(tile).join('/');
     if (key in tiles) return tiles[key];
     else throw new Error('tile not found');
 
   } else {
     // lower zoom level (..., 5, 6, 7)
-    var children = getChildren(tile);
+    var children = _getChildren(tile);
     var votes = [];  // list of timezone abbrevations
     var abbrs = {};  // abbrevation to full name lookup table
     children.forEach(function(child) {
@@ -58,24 +69,35 @@ function getFuzzyTimezoneFromTile(tile) {
   }
 }
 
+/**
+ * Retrieves the timezone of the quadkey of interest at z8-level accuracy.
+ * @param  {Array}  quadkey   a quadkey
+ * @return {String}           timezone for the quadkey
+ */
 function getFuzzyTimezoneFromQuadkey(quadkey) {
   var tile = tilebelt.quadkeyToTile(quadkey);
   return getFuzzyTimezoneFromTile(tile);
 }
 
-function getParent(tile) {
+/**
+ * [private function]
+ */
+function _getParent(tile) {
   if (tile[2] < z) throw new Error('input tile zoom < ' + z);
-  if (tile[2] > z) return getParent(tilebelt.getParent(tile));
+  if (tile[2] > z) return _getParent(tilebelt.getParent(tile));
   else return tile;
 }
 
-function getChildren(tile) {
+/**
+ * [private function]
+ */
+function _getChildren(tile) {
   if (tile[2] > z) throw new Error('input tile zoom > ' + z);
   if (tile[2] === z) return [tile];
 
   var children = tilebelt.getChildren(tile);
-  return getChildren(children[0])
-         .concat(getChildren(children[1]))
-         .concat(getChildren(children[2]))
-         .concat(getChildren(children[3]));
+  return _getChildren(children[0])
+         .concat(_getChildren(children[1]))
+         .concat(_getChildren(children[2]))
+         .concat(_getChildren(children[3]));
 }
