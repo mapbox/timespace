@@ -5,7 +5,7 @@
 
 var path = require('path');
 var cover = require('tile-cover');
-var tilebelt = require('tilebelt');
+var tilebelt = require('@mapbox/tilebelt');
 var turf = require('turf');
 
 var timezones = require('../lib/timezones.json');
