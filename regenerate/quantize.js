@@ -8,7 +8,7 @@
 var fs = require('fs');
 var path = require('path');
 var cover = require('tile-cover');
-var tilebelt = require('tilebelt');
+var tilebelt = require('@mapbox/tilebelt');
 var turf = require('turf');
 var d3 = require('d3-queue');
 var mkdirp = require('mkdirp');
@@ -78,7 +78,7 @@ function coverTile(zone, done) {
   } catch (e) {
     console.log('Error detected:', e.message, '; skipping zone');
   }
-  
+
   zonesDone++;
   console.info('Processed', zonesDone + '/' + totalZones)
 
