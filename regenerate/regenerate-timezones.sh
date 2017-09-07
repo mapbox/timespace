@@ -5,5 +5,5 @@ ogr2ogr -f GeoJSON timezones.geojson dist/combined_shapefile.shp;
 rm -rf dist;
 gzip -f timezones.geojson;
 node ./regenerate/check-timezones.js timezones.geojson.gz timezones.geojson.gz;
-node ./regenerate/quantize.js 3
+node ./regenerate/quantize.js 8
 rm timezones.geojson.gz;

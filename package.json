@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@mapbox/tilebelt": "^1.0.1",
+    "@mapbox/tile-cover": "^3.0.2",
     "d3-queue": "^3.0.3",
     "mkdirp": "^0.5.1",
     "moment": "^2.12.0",

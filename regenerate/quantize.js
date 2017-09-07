@@ -66,18 +66,19 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
 function coverTile(zone, done) {
   var opts = {min_zoom: z, max_zoom: z};
 
-  try {
-    cover.tiles(zone.geometry, opts).forEach(function(tile) {
-      var id = tile.join('/');
-      var poly = turf.polygon(tilebelt.tileToGeoJSON(tile).coordinates);
-      var overlap = turf.area(turf.intersect(zone, poly));
+  cover.tiles(zone.geometry, opts).forEach(function(tile) {
+    var id = tile.join('/');
+    var poly = turf.polygon(tilebelt.tileToGeoJSON(tile).coordinates);
 
+    try {
+      var overlap = turf.area(turf.intersect(zone, poly));
       if (!tiles[id] || tiles[id].overlap < overlap)
         tiles[id] = {name: zone.properties.tzid, overlap: overlap};
-    });
-  } catch (e) {
-    console.log('Error detected:', e.message, '; skipping zone');
-  }
+    } catch (e) {
+      console.log('Error detected: ' + e.message + '; zone: ' + zone.properties.tzid + '; tile: ' + id);
+    }
+
+  });
 
   zonesDone++;
   console.info('Processed', zonesDone + '/' + totalZones)
