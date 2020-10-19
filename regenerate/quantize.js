@@ -64,7 +64,13 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
 
 
 function coverTile(zone, done) {
+  if (!zone.properties.tzid.toLowerCase().includes('america')) {
+    done();
+    console.info(`Ignored zone: ${zone.properties.tzid}`);
+    return;
+  }
   console.info(`Processing zone: ${zone.properties.tzid} with ${zone.geometry.coordinates[0].length} points`)
+
   var opts = {min_zoom: z, max_zoom: z};
 
   cover.tiles(zone.geometry, opts).forEach(function(tile) {
