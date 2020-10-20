@@ -64,7 +64,7 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
 
 
 function coverTile(zone, done) {
-  if (!zone.properties.tzid.toLowerCase().includes('america')) {
+  if (zone.properties.tzid.toLowerCase().includes('antarctica') || zone.properties.tzid.toLowerCase().includes('etc')) {
     done();
     console.info(`Ignored zone: ${zone.properties.tzid}`);
     return;
