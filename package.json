@@ -9,13 +9,13 @@
     "d3-queue": "^3.0.3",
     "mkdirp": "^0.5.1",
     "moment": "^2.12.0",
-    "moment-timezone": "^0.5.5",
+    "moment-timezone": "^0.5.33",
     "rimraf": "^2.5.4",
     "simple-statistics": "^2.3.0",
     "tile-cover": "^3.0.1"
   },
   "devDependencies": {
-    "eslint": "^2.5.1",
+    "eslint": "^4.18.2",
     "eslint-config-mourner": "^2.0.0",
     "tap": "^5.7.0",
     "turf": "^2.0.2"
