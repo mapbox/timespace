@@ -1,6 +1,6 @@
 {
   "name": "@mapbox/timespace",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "description": "compute fuzzy local time from a location",
   "main": "index.js",
   "dependencies": {
@@ -55,5 +55,8 @@
         "never"
       ]
     }
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
