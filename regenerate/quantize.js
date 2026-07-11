@@ -64,6 +64,13 @@ zlib.gunzip(timezoneBuffer, function(err, data) {
 
 
 function coverTile(zone, done) {
+  if (zone.properties.tzid.toLowerCase().includes('antarctica') || zone.properties.tzid.toLowerCase().includes('etc')) {
+    done();
+    console.info(`Ignored zone: ${zone.properties.tzid}`);
+    return;
+  }
+  console.info(`Processing zone: ${zone.properties.tzid} with ${zone.geometry.coordinates[0].length} points`)
+
   var opts = {min_zoom: z, max_zoom: z};
 
   cover.tiles(zone.geometry, opts).forEach(function(tile) {
@@ -81,7 +88,7 @@ function coverTile(zone, done) {
   });
 
   zonesDone++;
-  console.info('Processed', zonesDone + '/' + totalZones)
+  console.info(`${zonesDone}/${totalZones}. Processed zone: ${zone.properties.tzid}`)
 
   done();
 }
