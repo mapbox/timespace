@@ -1,5 +1,5 @@
 # timespace [![Build Status](https://travis-ci.org/mapbox/timespace.svg?branch=master)](https://travis-ci.org/mapbox/timespace)
-Compute fuzzy local time from a location. The default accuracy is [zoom level 8](http://wiki.openstreetmap.org/wiki/Zoom_levels). See ["Regenerate timezones.json"](https://github.com/mapbox/timespace#regenerate-timezonesjson) section for instructions on how to change accuracy.
+Compute fuzzy local time from a location. The default accuracy is [zoom level 8](http://wiki.openstreetmap.org/wiki/Zoom_levels). See ["Regenerate timezones.json"](https://github.com/mapbox/timespace?tab=readme-ov-file#regenerate-timezonesjson)) section for instructions on how to change accuracy.
 
 Timezone data is from https://github.com/evansiroky/timezone-boundary-builder/.
 
