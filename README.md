@@ -23,7 +23,7 @@ var ts = require('@mapbox/timespace');
 var timestamp = Date.now();
 var point = [-122.27783203125, 37.84015683604136];
 var time = ts.getFuzzyLocalTimeFromPoint(timestamp, point);
-//=> (a `moment-timezone` object – see https://momentjs.com/timezone/)
+//=> (a `DateTime` object – see https://moment.github.io/luxon/api-docs/index.html#datetime)  
 
 
 var tile = [41, 98, 8];     // the tile [x, y, z] whose timezone we want to know

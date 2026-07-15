@@ -1,6 +1,6 @@
 var tiles = require('./lib/timezones.json');
 var tilebelt = require('@mapbox/tilebelt');
-var moment = require('moment-timezone');
+const { DateTime } = require('luxon');
 var ss = require('simple-statistics');
 
 var z = Object.keys(tiles)[0].split('/').map(Number)[2];
@@ -17,13 +17,13 @@ module.exports = {
  * Returns the local time at the point of interest.
  * @param  {Integer} timestamp   a unix timestamp
  * @param  {Array}   point       a [lng, lat] point of interest
- * @return {Object}              a moment-timezone object
+ * @return {DateTime}            a luxon DateTime object
  */
 function getFuzzyLocalTimeFromPoint(timestamp, point) {
   var tile = tilebelt.pointToTile(point[0], point[1], z).join('/');
   var locale = tiles[tile];
 
-  if (locale) return moment.tz(new Date(timestamp), locale);
+  if (locale) return DateTime.fromMillis(timestamp).setZone(locale);
   else return undefined;
 }
 
@@ -58,7 +58,7 @@ function getFuzzyTimezoneFromTile(tile) {
         // and America/Vancouver are the same. Use a time to determine the
         // abbreviation, in case two similar tz have slightly different
         // daylight savings schedule.
-        var abbr = moment.tz(Date.now(), tz)._z.abbrs[0];
+        var abbr = DateTime.now().setZone(tz).toFormat('ZZZ');
         votes.push(abbr);
         abbrs[abbr] = tz;
       }

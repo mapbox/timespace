@@ -1,6 +1,6 @@
 var timezones = require('../lib/timezones.json');
 var test = require('tap').test;
-var moment = require('moment-timezone');
+const { DateTime } = require('luxon');
 var ts = require('../');
 
 var z = Object.keys(timezones)[0].split('/').map(Number)[2];
@@ -44,7 +44,7 @@ test('check zone', function(t) {
   var quadkey2 = '02301023';
 
   if (z === 8) {
-    var expected = moment.tz(new Date(timestamp), 'America/Los_Angeles');
+    var expected = DateTime.fromMillis(timestamp).setZone('America/Los_Angeles');
     t.deepequal(ts.getFuzzyLocalTimeFromPoint(timestamp, point), expected);
     t.equal(ts.getFuzzyTimezoneFromTile(tile), 'America/Los_Angeles');
     t.equal(ts.getFuzzyTimezoneFromQuadkey(quadkey), 'America/Los_Angeles');
