@@ -227,3 +227,10 @@ test('check higher zoom levels', function(t) {
 
   t.end();
 });
+
+test('lower zoom votes by the current abbreviation', function(t) {
+  if (z === 8) {
+    t.equal(ts.getFuzzyTimezoneFromTile([3, 5, 4]), 'America/Chicago');
+  }
+  t.end();
+});

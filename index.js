@@ -58,7 +58,8 @@ function getFuzzyTimezoneFromTile(tile) {
         // and America/Vancouver are the same. Use a time to determine the
         // abbreviation, in case two similar tz have slightly different
         // daylight savings schedule.
-        var abbr = moment.tz(Date.now(), tz)._z.abbrs[0];
+        // abbrs[0] is the historical abbreviation (LMT for most zones), not the one at this time.
+        var abbr = moment.tz(Date.now(), tz).zoneAbbr();
         votes.push(abbr);
         abbrs[abbr] = tz;
       }
